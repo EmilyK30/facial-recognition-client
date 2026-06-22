@@ -1,13 +1,17 @@
 import { BrowserRouter } from "react-router-dom";
-import Navbar from "./components/layout/Navbar";
+import Sidebar from "./components/layout/Sidebar";
 import AppRoutes from "./routes/AppRoutes";
-import "./App.css";
 import "./styles/global.css";
+
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <AppRoutes />
+      <div className="app-layout">
+        <Sidebar />
+        <main className="app-content">
+          <AppRoutes />
+        </main>
+      </div>
     </BrowserRouter>
   );
 }
