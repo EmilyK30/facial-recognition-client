@@ -3,10 +3,21 @@ import Loader from "../components/common/Loader";
 import ErrorAlert from "../components/common/ErrorAlert";
 import { searchPerson, getErrorMessage } from "../services/api";
 
-/**
- * Page Recherche / Consultation - F3 du cahier des charges.
- * GET /?numero_dossier=X -> affiche la fiche, ou message si 404.
- */
+function getInitials(prenom, nom) {
+  const p = prenom ? prenom[0] : "";
+  const n = nom ? nom[0] : "";
+  return (p + n).toUpperCase() || "?";
+}
+
+const FAKE_PREVIEW = true;
+const FAKE_PERSON = {
+  numero_dossier: "DKR-2026-3938",
+  prenom: "Amadou",
+  nom: "Diop",
+  adresse: "Plateau, Dakar",
+  date_naissance: "1990-03-12",
+};
+
 function Search() {
   const [numeroDossier, setNumeroDossier] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +36,14 @@ function Search() {
     setError(null);
     setPersonne(null);
 
+    if (FAKE_PREVIEW) {
+      setTimeout(() => {
+        setPersonne(FAKE_PERSON);
+        setIsLoading(false);
+      }, 600);
+      return;
+    }
+
     try {
       const data = await searchPerson(numeroDossier.trim());
       setPersonne(data.personne);
@@ -36,46 +55,57 @@ function Search() {
   };
 
   return (
-    <div className="search-page">
-      <h1>Recherche d'une personne</h1>
+    <div className="app-main">
+      <div className="page-header">
+        <h1>Recherche d'une personne</h1>
+        <p className="page-header__subtitle">
+          Retrouvez le dossier complet d'une personne enrôlée grâce à son numéro de dossier.
+        </p>
+      </div>
 
-      <form onSubmit={handleSearch} className="search-page__form">
-        <label htmlFor="numero_dossier">Numéro de dossier</label>
-        <input
-          id="numero_dossier"
-          type="text"
-          value={numeroDossier}
-          onChange={(e) => setNumeroDossier(e.target.value)}
-          placeholder="Ex. Ousseynou"
-        />
-        <button type="submit" disabled={isLoading}>
-          Rechercher
-        </button>
-      </form>
+      <div className="search-panel">
+        <form onSubmit={handleSearch}>
+          <div className="field">
+            <label htmlFor="numero_dossier">Numéro de dossier</label>
+            <input
+              id="numero_dossier"
+              type="text"
+              value={numeroDossier}
+              onChange={(e) => setNumeroDossier(e.target.value)}
+              placeholder="Ex. Ousseynou"
+            />
+          </div>
+          <button type="submit" className="btn" disabled={isLoading}>
+            Rechercher
+          </button>
+        </form>
+      </div>
 
       {isLoading && <Loader text="Recherche en cours..." />}
 
       {error && <ErrorAlert message={error} />}
 
       {personne && (
-        <div className="search-page__result">
-          <h2>Fiche trouvée</h2>
-          <dl>
-            <dt>Numéro de dossier</dt>
-            <dd>{personne.numero_dossier}</dd>
+        <div className="result-card">
+          <div className="result-card__photo">
+            {getInitials(personne.prenom, personne.nom)}
+          </div>
+          <div className="result-card__body">
+            <div className="result-card__header">
+              <h2>{personne.prenom} {personne.nom}</h2>
+              <span className="badge">Enregistré</span>
+            </div>
+            <dl>
+              <dt>Numéro de dossier</dt>
+              <dd>{personne.numero_dossier}</dd>
 
-            <dt>Prénom</dt>
-            <dd>{personne.prenom || "—"}</dd>
+              <dt>Adresse</dt>
+              <dd>{personne.adresse || "—"}</dd>
 
-            <dt>Nom</dt>
-            <dd>{personne.nom || "—"}</dd>
-
-            <dt>Adresse</dt>
-            <dd>{personne.adresse || "—"}</dd>
-
-            <dt>Date de naissance</dt>
-            <dd>{personne.date_naissance || "—"}</dd>
-          </dl>
+              <dt>Date de naissance</dt>
+              <dd>{personne.date_naissance || "—"}</dd>
+            </dl>
+          </div>
         </div>
       )}
     </div>
