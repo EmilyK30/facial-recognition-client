@@ -715,3 +715,85 @@ input:focus-visible {
 
   h1 { font-size: 1.3rem; }
 }
+/* ============================================================
+   REGISTER LAYOUT : 2 colonnes
+   ============================================================ */
+
+.register-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.register-layout__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.register-layout__webcam {
+  position: sticky;
+  top: var(--space-4);
+}
+
+.register-layout__photo-ok {
+  font-size: 0.82rem;
+  color: var(--color-success);
+  font-weight: 600;
+  margin: var(--space-2) 0 0;
+  text-align: center;
+}
+
+.field-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.field-row .field {
+  flex: 1;
+}
+
+.field__required {
+  color: var(--color-error);
+}
+
+.consent-box {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  background: var(--color-primary-soft);
+  border: 1px solid #C7D2FE;
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.consent-box input[type="checkbox"] {
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.consent-box label {
+  font-size: 0.82rem;
+  color: #1E3A5F;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .register-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .register-layout__webcam {
+    position: static;
+  }
+
+  .field-row {
+    flex-direction: column;
+  }
+}
