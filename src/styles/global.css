@@ -567,6 +567,7 @@ input:focus-visible {
   box-shadow: 0 1px 3px rgba(30,41,59,0.05);
   position: relative;
   overflow: hidden;
+  min-width: 0;
   transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
 
@@ -593,14 +594,12 @@ input:focus-visible {
 }
 
 .stats-bar__label {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: #475569;
-  white-space: nowrap;
+  white-space: normal;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .stats-bar__icon {
