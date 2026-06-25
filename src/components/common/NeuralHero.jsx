@@ -149,7 +149,7 @@ function NeuralHero({ title, subtitle, children, actions }) {
               fontSize: "0.88rem", color: "rgba(255,255,255,0.72)",
               margin: "0 0 26px", lineHeight: 1.65, maxWidth: "460px",
             }}>
-              {subtitle.split("\n").map((line, i) => (
+              {subtitle.split("\\n").map((line, i) => (
                 <span key={i} style={{ display: "block" }}>{line}</span>
               ))}
             </p>
