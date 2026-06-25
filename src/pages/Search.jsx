@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Loader from "../components/common/Loader";
 import ErrorAlert from "../components/common/ErrorAlert";
+import NeuralHero from "../components/common/NeuralHero";
 import { searchPerson, getErrorMessage } from "../services/api";
 
 function getInitials(prenom, nom) {
@@ -56,12 +57,7 @@ function Search() {
 
   return (
     <div className="app-main">
-      <div className="page-header">
-        <h1>Recherche d'une personne</h1>
-        <p className="page-header__subtitle">
-          Retrouvez le dossier complet d'une personne enrôlée grâce à son numéro de dossier.
-        </p>
-      </div>
+      <NeuralHero title="Recherche" subtitle="Retrouvez une personne par son numéro de dossier." />
 
       <div className="search-panel">
         <form onSubmit={handleSearch}>
@@ -72,7 +68,7 @@ function Search() {
               type="text"
               value={numeroDossier}
               onChange={(e) => setNumeroDossier(e.target.value)}
-              placeholder="Ex. Ousseynou"
+              placeholder="Ex : DOS-2024-001"
             />
           </div>
           <button type="submit" className="btn" disabled={isLoading}>

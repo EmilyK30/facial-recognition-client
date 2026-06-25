@@ -1,5 +1,6 @@
 import { useState } from "react";
 import WebcamCapture from "../components/webcam/WebcamCapture";
+import NeuralHero from "../components/common/NeuralHero";
 import { recognizeFace, getErrorMessage } from "../services/api";
 
 const styles = {
@@ -88,9 +89,8 @@ function Recognize() {
   };
 
   return (
-    <div style={styles.page}>
-      <h1 style={styles.title}>🔍 Reconnaissance</h1>
-      <p style={styles.sub}>Prenez une photo ou importez une image pour identifier une personne.</p>
+    <div>
+      <NeuralHero title="Reconnaissance" subtitle="Prenez une photo pour identifier une personne." />
 
       <div style={styles.captureBox}>
         <WebcamCapture onCapture={handleCapture} />

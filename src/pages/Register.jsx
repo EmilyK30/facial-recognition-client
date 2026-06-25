@@ -2,6 +2,7 @@ import { useState } from "react";
 import WebcamCapture from "../components/webcam/WebcamCapture";
 import Loader from "../components/common/Loader";
 import ErrorAlert from "../components/common/ErrorAlert";
+import NeuralHero from "../components/common/NeuralHero";
 import { registerPerson, getErrorMessage } from "../services/api";
 
 function Register() {
@@ -55,17 +56,12 @@ function Register() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1>Enrôlement d'une personne</h1>
-        <p className="page-header__subtitle">
-          Enregistrez une nouvelle personne dans le système avec sa photo.
-        </p>
-      </div>
+      <NeuralHero title="Enrôlement" subtitle="Enregistrez une nouvelle personne avec sa photo." />
 
-      {/* Layout 2 colonnes : formulaire à gauche, webcam à droite */}
+      {/* Grille 2 colonnes : infos | webcam */}
       <div className="register-layout">
 
-        {/* Colonne gauche : informations + consentement + bouton */}
+        {/* Colonne gauche : informations générales uniquement */}
         <div className="register-layout__form">
           <div className="panel">
             <p className="panel__title">Informations générales</p>
@@ -127,53 +123,9 @@ function Register() {
               />
             </div>
           </div>
-
-          {/* Consentement RGPD */}
-          <div className="consent-box">
-            <input
-              type="checkbox"
-              id="consent"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-            />
-            <label htmlFor="consent">
-              La personne concernée a été informée et a donné son consentement
-              explicite pour la collecte et le traitement de ses données
-              biométriques conformément aux exigences de protection des données
-              en vigueur.
-            </label>
-          </div>
-
-          <button
-            className="btn"
-            onClick={handleSubmit}
-            disabled={!canSubmit}
-            style={{ width: "100%", marginTop: "var(--space-3)" }}
-          >
-            {loading ? "Enregistrement en cours..." : "Enrôler la personne"}
-          </button>
-
-          {loading && <Loader text="Enregistrement en cours..." />}
-          {error && <ErrorAlert message={error} />}
-
-          {success && (
-            <div className="success-alert" style={{ marginTop: "var(--space-3)" }}>
-              <div>
-                <strong>
-                  {success.prenom || ""} {success.nom || ""} enregistré(e) avec succès
-                </strong>
-                <p style={{ margin: "4px 0 0", fontSize: "0.85rem" }}>
-                  Dossier · {success.numero_dossier}
-                  {success.created_at && (
-                    <> · Le {new Date(success.created_at).toLocaleString("fr-FR")}</>
-                  )}
-                </p>
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Colonne droite : capture webcam */}
+        {/* Colonne droite : capture du visage uniquement */}
         <div className="register-layout__webcam">
           <div className="panel">
             <p className="panel__title">Capture du visage</p>
@@ -186,6 +138,50 @@ function Register() {
           </div>
         </div>
       </div>
+
+      {/* Hors grille : ordre mobile correct — consentement → bouton → feedback */}
+      <div className="consent-box" style={{ marginTop: "var(--space-3)" }}>
+        <input
+          type="checkbox"
+          id="consent"
+          checked={consent}
+          onChange={(e) => setConsent(e.target.checked)}
+        />
+        <label htmlFor="consent">
+          La personne concernée a été informée et a donné son consentement
+          explicite pour la collecte et le traitement de ses données
+          biométriques conformément aux exigences de protection des données
+          en vigueur.
+        </label>
+      </div>
+
+      <button
+        className="btn"
+        onClick={handleSubmit}
+        disabled={!canSubmit}
+        style={{ width: "100%", marginTop: "var(--space-3)" }}
+      >
+        {loading ? "Enregistrement en cours..." : "Enrôler la personne"}
+      </button>
+
+      {loading && <Loader text="Enregistrement en cours..." />}
+      {error && <ErrorAlert message={error} />}
+
+      {success && (
+        <div className="success-alert" style={{ marginTop: "var(--space-3)" }}>
+          <div>
+            <strong>
+              {success.prenom || ""} {success.nom || ""} enregistré(e) avec succès
+            </strong>
+            <p style={{ margin: "4px 0 0", fontSize: "0.85rem" }}>
+              Dossier · {success.numero_dossier}
+              {success.created_at && (
+                <> · Le {new Date(success.created_at).toLocaleString("fr-FR")}</>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
