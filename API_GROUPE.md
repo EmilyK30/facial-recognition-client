@@ -6,13 +6,13 @@ l'application cliente appelle l'API.
 ## URL de base
 
 ```
-http://194.164.63.151:8090
+http://194.164.63.151
 ```
 
 Le tenant du groupe est routé par l'adresse du serveur : **aucun en-tête
 spécial n'est nécessaire**, il suffit d'appeler cette URL.
 
-> Test de connectivité : `GET http://194.164.63.151:8090/` doit renvoyer le
+> Test de connectivité : `GET http://194.164.63.151/` doit renvoyer le
 > tenant « Groupe Reconnaissance Faciale ».
 
 ---
@@ -33,7 +33,7 @@ spécial n'est nécessaire**, il suffit d'appeler cette URL.
 Exemple :
 
 ```bash
-curl -X POST http://194.164.63.151:8090/register \
+curl -X POST http://194.164.63.151/register \
   -F "numero_dossier=ousseynou" \
   -F "prenom=Ousseynou" -F "nom=Ndour" \
   -F "file=@photo.jpg"
@@ -62,7 +62,7 @@ Réponses :
 Exemple :
 
 ```bash
-curl -X POST http://194.164.63.151:8090/recognize \
+curl -X POST http://194.164.63.151/recognize \
   -F "file=@a_reconnaitre.jpg"
 ```
 
@@ -89,7 +89,7 @@ La liste `resultats` est **vide** si aucun visage ne dépasse le seuil.
 ## 3. Chercher une personne — `GET /?numero_dossier=X`
 
 ```bash
-curl "http://194.164.63.151:8090/?numero_dossier=ousseynou"
+curl "http://194.164.63.151/?numero_dossier=ousseynou"
 ```
 
 `200` (personne trouvée) · `404` (inconnue).
