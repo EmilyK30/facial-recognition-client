@@ -4,6 +4,7 @@ import Loader from "../components/common/Loader";
 import ErrorAlert from "../components/common/ErrorAlert";
 import NeuralHero from "../components/common/NeuralHero";
 import { registerPerson, getErrorMessage } from "../services/api";
+import { savePhoto } from "../services/photoStorage";
 
 function Register() {
   const [numeroDossier, setNumeroDossier] = useState("");
@@ -40,6 +41,9 @@ function Register() {
         file,
       });
       setSuccess(data.personne);
+      // Sauvegarde locale de la photo (l'API ne la retourne pas) :
+      // appel non bloquant, un échec n'empêche pas l'enrôlement
+      savePhoto(data.personne?.numero_dossier || numeroDossier.trim(), file);
       setNumeroDossier("");
       setPrenom("");
       setNom("");

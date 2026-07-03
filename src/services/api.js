@@ -1,4 +1,5 @@
 import axios from "axios";
+import { incrementStat } from "./stats";
 
 /**
  * Service API centralise.
@@ -65,6 +66,7 @@ export async function registerPerson({
   formData.append("file", file);
 
   const response = await api.post("/register", formData);
+  incrementStat("enrolements"); // Compteur local (voir services/stats.js)
   return response.data; // { message, personne, face_id, faces_count }
 }
 
@@ -81,6 +83,11 @@ export async function recognizeFace({ file, threshold }) {
   }
 
   const response = await api.post("/recognize", formData);
+  // Compteur local : on ne compte que les reconnaissances ayant trouvé
+  // au moins une correspondance ("réussies")
+  if (response.data?.resultats?.length > 0) {
+    incrementStat("reconnaissances");
+  }
   return response.data; // { tenant, resultats: [...] }
 }
 
@@ -92,5 +99,24 @@ export async function searchPerson(numeroDossier) {
   const response = await api.get("/", {
     params: { numero_dossier: numeroDossier },
   });
+  incrementStat("recherches"); // Compteur local (voir services/stats.js)
   return response.data; // { message, tenant, personne }
+}
+
+/**
+ * Vérification de disponibilité du backend (pour la tuile "Statut du
+ * système" de l'accueil). On interroge la racine avec un numéro de dossier
+ * factice : toute réponse HTTP (même 404) prouve que le serveur est
+ * joignable ; seule une erreur réseau signifie qu'il est hors ligne.
+ */
+export async function checkApiStatus() {
+  try {
+    await api.get("/", {
+      params: { numero_dossier: "__healthcheck__" },
+      timeout: 5000,
+    });
+    return true;
+  } catch (error) {
+    return Boolean(error.response);
+  }
 }
