@@ -2,6 +2,7 @@ import { useState } from "react";
 import WebcamCapture from "../components/webcam/WebcamCapture";
 import NeuralHero from "../components/common/NeuralHero";
 import { recognizeFace, getErrorMessage } from "../services/api";
+import { getPhoto } from "../services/photoStorage";
 
 const styles = {
   page: { padding: "2rem 1.5rem", maxWidth: 680, margin: "0 auto", fontFamily: "sans-serif" },
@@ -31,10 +32,20 @@ function getInitials(prenom, nom) {
 
 function ResultCard({ resultat }) {
   const { personne, score, numero_dossier } = resultat;
+  // Photo stockée localement lors de l'enrôlement (null si absente)
+  const photo = getPhoto(numero_dossier);
   return (
     <div style={styles.card}>
       <div style={styles.cardHeader}>
-        <div style={styles.avatar}>{getInitials(personne.prenom, personne.nom)}</div>
+        {photo ? (
+          <img
+            src={photo}
+            alt={`Photo de ${personne.prenom ?? ""} ${personne.nom ?? ""}`.trim()}
+            style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+          />
+        ) : (
+          <div style={styles.avatar}>{getInitials(personne.prenom, personne.nom)}</div>
+        )}
         <div>
           <p style={styles.name}>{personne.prenom} {personne.nom}</p>
           <p style={styles.dossier}>Dossier · {numero_dossier}</p>

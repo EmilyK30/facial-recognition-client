@@ -100,7 +100,7 @@ function WebcamCapture({ onCapture }) {
   };
 
   return (
-    <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "12px" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
 
       {/* Onglets */}
       <div style={{ display: "flex", gap: "8px", width: "100%" }}>
@@ -147,14 +147,16 @@ function WebcamCapture({ onCapture }) {
 
       {/* Mode webcam — flux video */}
       {!previewUrl && mode === "webcam" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            style={{ width: "100%", borderRadius: "8px", border: "1px solid #E5E7EB", display: "block", background: "#000" }}
-          />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
+          <div style={{ width: "100%", aspectRatio: "4 / 3", borderRadius: "8px", border: "1px solid #E5E7EB", overflow: "hidden", background: "#000" }}>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          </div>
           <button
             type="button"
             onClick={handleCapture}
@@ -186,6 +188,7 @@ function WebcamCapture({ onCapture }) {
             justifyContent: "center",
             gap: "8px",
             width: "100%",
+            flex: 1,
             minHeight: "160px",
             border: "2px dashed #E5E7EB",
             borderRadius: "8px",
@@ -214,11 +217,11 @@ function WebcamCapture({ onCapture }) {
 
       {/* Apercu */}
       {previewUrl && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
           <img
             src={previewUrl}
             alt="Aperçu"
-            style={{ width: "100%", borderRadius: "8px", border: "1px solid #E5E7EB", display: "block" }}
+            style={{ width: "100%", flex: 1, minHeight: 0, objectFit: "contain", borderRadius: "8px", border: "1px solid #E5E7EB", display: "block" }}
           />
           <button
             type="button"

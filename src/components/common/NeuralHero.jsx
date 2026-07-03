@@ -1,4 +1,19 @@
+import { useApiStatus } from "../../hooks/useApiStatus";
+
+/**
+ * Contenu du badge de statut selon l'état réel du backend
+ * (vérifié via le hook useApiStatus).
+ */
+const BADGE_DISPLAY = {
+  checking: { dot: "#94A3B8", text: "Vérification du système…" },
+  up: { dot: "#10B981", text: "Système biométrique actif" },
+  down: { dot: "#EF4444", text: "Système hors ligne" },
+};
+
 function NeuralHero({ title, subtitle, children, actions }) {
+  const apiStatus = useApiStatus();
+  const badge = BADGE_DISPLAY[apiStatus];
+
   return (
     <div style={{
       background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338CA 65%, #6366F1 100%)",
@@ -133,8 +148,8 @@ function NeuralHero({ title, subtitle, children, actions }) {
             marginBottom: "18px",
             backdropFilter: "blur(6px)",
           }}>
-            <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#10B981", display: "inline-block", flexShrink: 0 }} />
-            Système biométrique actif — IA v2.4
+            <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: badge.dot, display: "inline-block", flexShrink: 0 }} />
+            {badge.text}
           </div>
 
           <h1 style={{

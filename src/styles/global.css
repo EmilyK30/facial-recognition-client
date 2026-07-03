@@ -493,6 +493,16 @@ input:focus-visible {
 .home-card:hover::before { transform: scaleX(1); }
 .home-card:hover::after  { opacity: 1; }
 
+/* Focus clavier : même mise en avant que le survol + anneau visible */
+.home-card:focus-visible {
+  outline: 2px solid var(--accent, #6366F1);
+  outline-offset: 3px;
+  transform: translateY(-4px);
+}
+
+.home-card:focus-visible::before { transform: scaleX(1); }
+.home-card:focus-visible::after  { opacity: 1; }
+
 .home-card__icon {
   width: 56px;
   height: 56px;
@@ -978,6 +988,8 @@ input:focus-visible {
 .webcam-capture__preview img {
   width: 100%;
   height: auto;
+  max-height: 340px;
+  object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--color-line);
   display: block;
@@ -1050,7 +1062,7 @@ input:focus-visible {
 
 .register-layout {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
   align-items: stretch;
 }

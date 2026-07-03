@@ -3,6 +3,7 @@ import Loader from "../components/common/Loader";
 import ErrorAlert from "../components/common/ErrorAlert";
 import NeuralHero from "../components/common/NeuralHero";
 import { searchPerson, getErrorMessage } from "../services/api";
+import { getPhoto } from "../services/photoStorage";
 
 function getInitials(prenom, nom) {
   const p = prenom ? prenom[0] : "";
@@ -10,14 +11,6 @@ function getInitials(prenom, nom) {
   return (p + n).toUpperCase() || "?";
 }
 
-const FAKE_PREVIEW = true;
-const FAKE_PERSON = {
-  numero_dossier: "DKR-2026-3938",
-  prenom: "Amadou",
-  nom: "Diop",
-  adresse: "Plateau, Dakar",
-  date_naissance: "1990-03-12",
-};
 
 function Search() {
   const [numeroDossier, setNumeroDossier] = useState("");
@@ -36,14 +29,6 @@ function Search() {
     setIsLoading(true);
     setError(null);
     setPersonne(null);
-
-    if (FAKE_PREVIEW) {
-      setTimeout(() => {
-        setPersonne(FAKE_PERSON);
-        setIsLoading(false);
-      }, 600);
-      return;
-    }
 
     try {
       const data = await searchPerson(numeroDossier.trim());
@@ -83,9 +68,39 @@ function Search() {
 
       {personne && (
         <div className="result-card">
-          <div className="result-card__photo">
-            {getInitials(personne.prenom, personne.nom)}
-          </div>
+          {/* Photo stockée localement si disponible, sinon avatar avec initiales */}
+          {getPhoto(personne.numero_dossier) ? (
+            <img
+              className="result-card__photo"
+              src={getPhoto(personne.numero_dossier)}
+              alt={`Photo de ${personne.prenom || ""} ${personne.nom || ""}`.trim()}
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                flexShrink: 0,
+                boxShadow: "0 4px 12px rgba(99,102,241,0.4)",
+              }}
+            />
+          ) : (
+            <div className="result-card__photo" style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "1.8rem",
+              fontWeight: "800",
+              color: "white",
+              flexShrink: 0,
+              boxShadow: "0 4px 12px rgba(99,102,241,0.4)",
+            }}>
+              {getInitials(personne.prenom, personne.nom)}
+            </div>
+          )}
           <div className="result-card__body">
             <div className="result-card__header">
               <h2>{personne.prenom} {personne.nom}</h2>
